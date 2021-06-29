@@ -2,6 +2,17 @@
 
 set CURR_DIR=$(pwd)
 
+# Enable nginx ingress controller if using minikube
+# minikube addons enable ingress
+
+# For azure
+# kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v0.47.0/deploy/static/provider/cloud/deploy.yaml
+
+# Or using helm to install the ingress controller
+#helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
+#helm repo update
+#helm install ingress-nginx ingress-nginx/ingress-nginx
+
 cd ../server
 
 # In order to get the IP address and port number of the service
@@ -11,6 +22,9 @@ cd ../client
 
 # build the image and push to registry
 ./make.sh
+
+# Replace <REACT_APP_baseAPIURL> in the client-app-configs.yaml
+# Eg. REACT_APP_baseAPIURL: http://192.168.98.131
 
 # Create config, deployment, replicaSet, and Pod resource
 kubectl apply -f client-app-configs.yaml

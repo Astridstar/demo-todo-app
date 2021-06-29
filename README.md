@@ -14,3 +14,7 @@ After a successful login, user will then add a new Todo task and list already ad
 
 ** Note that this is a fork from https://github.com/aamirpinger/todo-app-client-server-kubernetes.git **
 Source code credits goes to aamirpinger. Changes have been made to let it run on kubernetes with dependencies cut to a minimum
+
+1. nginx ingress contoller required for deployment
+2. Refer to deployment_order.txt for the steps required to deploy the applications. This include building of the client and server images.
+3. This deployment uses my github repository as the image repository hence all push require a secret from me. Please change in the ./client/make.sh and ./sever/make.sh to the repository to be used.
