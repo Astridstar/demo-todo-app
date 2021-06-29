@@ -1,0 +1,63 @@
+#!/bin/bash
+
+set CURR_DIR=$(pwd)
+
+cd ../server
+
+# In order to get the IP address and port number of the service
+kubectl apply -f server-app-service.yaml
+
+cd ../client
+
+# build the image and push to registry
+./make.sh
+
+# Create config, deployment, replicaSet, and Pod resource
+kubectl apply -f client-app-configs.yaml
+kubectl apply -f client-app-deploy.yaml
+
+# Check resources are deployed successfully
+kubectl get deploy,rs,pod
+
+# Create client service
+kubectl apply -f client-app-service.yaml
+
+# Access the webpage using the IP addr of minikube and port number of the client service nodeport
+# E.g. http://192.168.99.100
+
+cd ../server
+
+# Create the persistent volume and volume claim
+kubectl apply -f persistent-vol-server-app.yaml
+kubectl apply -f persistent-vol-claim-server-app.yaml
+
+# Create the mongodb pod
+kubectl apply -f mongodb-pod.yaml
+
+# Create the mongodb service
+kubectl apply -f mongodb-service.yaml
+
+# Check and confirm on resources created so far
+kubectl get pv,pvc,pod,svc
+
+# Build the server container image and push it to the remote registry
+./make.sh
+
+# Replace <front-end-app-service-ip>:<port> in the server-app-configs.yaml
+
+# Create the config map
+kubectl apply -f server-app-configs.yaml
+
+# Create a secret resource to hold secret string for JSON web token (JWT) which we will be using in our backend app to generate auth token.
+kubectl create secret generic server-side-secrets --from-literal=JWT_SECRET=<somepassword>
+
+# Deploy the server container
+kubectl apply -f server-app-deploy.yaml
+
+# Deploy the ingress controller
+kubectl apply -f ingress.yaml
+
+# Check and confirm on resources created so far
+kubectl get deploy,rs,pv,pvc,pod,svc
+
+cd $CURR_DIR
