@@ -62,9 +62,9 @@ jobs:
         with:
           context: ./server
           push: true
-          tags: ${{ SERVER_IMAGE_TAG_LOWER }}
+          tags: ${{ env.SERVER_IMAGE_TAG_LOWER }}
           labels: ${{ steps.meta.outputs.labels }}
-          secrets: 'github_token=${{ secrets.REPO_TOKEN }}'
+          secrets: 'github_token=${{ secrets.GITHUB_TOKEN }}'
 
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
