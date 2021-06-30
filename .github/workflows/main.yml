@@ -28,10 +28,6 @@ jobs:
       #        working-directory: ./server
       #       run: docker build . --file Dockerfile --tag ${{ env.SERVER_IMAGE_TAG }}
 
-      - name: Convert image tag to lowercase
-        run: |
-          echo; set SERVER_IMAGE_TAG_LOWER=$( echo ${{ env.SERVER_IMAGE_TAG }} | tr '[:lower:] )'; echo $SERVER_IMAGE_TAG_LOWER
-
       # Login against a Docker registry except on PR
       # https://github.com/docker/login-action
       - name: Login to GitHub Container Registry
