@@ -1,0 +1,58 @@
+name: Build and deploy frontend and backend actions
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    # The branches below must be a subset of the branches above
+    branches: [master]
+
+env:
+  # Use docker.io for Docker Hub if empty
+  REGISTRY: ghcr.io
+  # github.repository as <account>/<repo>
+  IMAGE_NAME: ${{ github.repository }}
+  SERVER_IMAGE_NAME: ${{ env.IMAGE_NAME }}/Backend
+  CLIENT_IMAGE_NAME: ${{ env.IMAGE_NAME }}/Frontend
+
+jobs:
+  build:
+    name: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      # Login against a Docker registry except on PR
+      # https://github.com/docker/login-action
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      #      - name: Build the server Docker mage
+      #        working-directory: ./server
+      #       run: docker build . --file Dockerfile --tag ${{ env.SERVER_IMAGE_NAME }}
+
+      - name: Docker meta
+        id: meta
+        uses: docker/metadata-action@v3
+        with:
+          # list of Docker images to use as base name for tags
+          images: |
+            ${{ env.SERVER_IMAGE_NAME }}
+
+      # Build and push Docker image with Buildx (don't push on PR)
+      # https://github.com/docker/build-push-action
+      - name: Build and push
+        id: docker_build
+        uses: docker/build-push-action@v2
+        with:
+          push: true
+          tags: ${{ env.SERVER_IMAGE_NAME }}
+
+      - name: Image digest
+        run: echo ${{ steps.docker_build.outputs.digest }}
