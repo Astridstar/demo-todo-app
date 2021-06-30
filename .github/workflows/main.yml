@@ -28,6 +28,11 @@ jobs:
       #        working-directory: ./server
       #       run: docker build . --file Dockerfile --tag ${{ env.SERVER_IMAGE_TAG }}
 
+      - name: Convert repository name to lowercase
+        run: |
+          echo ${REPO_NAME_LOWER_CASE=$(  ${{ github.repository }} | tr "[:upper:]" "[:lower:]")}
+          
+          
       # Login against a Docker registry except on PR
       # https://github.com/docker/login-action
       - name: Login to GitHub Container Registry
