@@ -31,11 +31,7 @@ jobs:
 
       - name: Convert image tag to lowercase
         run: |
-          echo "converted=${SERVER_IMAGE_TAG,,}" >> ${SERVER_IMAGE_TAG_LOWER}
-
-      - name: Vallidate lowercase image tag image
-        run: |
-          echo "Lowercase Server Image Tag Name is : ${SERVER_IMAGE_TAG_LOWER}"
+          echo; set SERVER_IMAGE_TAG_LOWER=$( echo ${{ env.SERVER_IMAGE_TAG }} | tr '[:lower:] )'; echo $SERVER_IMAGE_TAG_LOWER
 
       # Login against a Docker registry except on PR
       # https://github.com/docker/login-action
