@@ -12,14 +12,16 @@ env:
   REGISTRY: ghcr.io
   # github.repository as <account>/<repo>
   IMAGE_NAME: ${{ github.repository }}
-  SERVER_IMAGE_TAG: ${{ REGISTRY }}/${{ github.repository }}/Backend
-  CLIENT_IMAGE_TAG: ${{ REGISTRY }}/${{ github.repository }}/Frontend
 
 jobs:
   build: #Job 1
     #needs: setup job
     name: build
     runs-on: ubuntu-latest
+
+    env:
+      SERVER_IMAGE_TAG: ${{ env.REGISTRY }}/${{ github.repository }}/Backend
+      CLIENT_IMAGE_TAG: ${{ env.REGISTRY }}/${{ github.repository }}/Frontend
 
     steps:
       - name: Checkout repository
