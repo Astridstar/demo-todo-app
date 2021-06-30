@@ -30,7 +30,7 @@ jobs:
 
       - name: Convert repository name to lowercase
         run: |
-          echo ${REPO_NAME_LOWER_CASE=$(  "${{ github.repository }}" | tr "[:upper:]" "[:lower:]")}
+          echo ${REPO_NAME_LOWER_CASE=$( echo "${{ github.repository }}" | tr "[:upper:]" "[:lower:]")}
           
           
       # Login against a Docker registry except on PR
