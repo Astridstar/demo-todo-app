@@ -11,7 +11,8 @@ env:
   # Use docker.io for Docker Hub if empty
   REGISTRY: ghcr.io
   # github.repository as <account>/<repo>
-  IMAGE_NAME: ${{ github.repository }}
+  REPOSITORY: ${{ github.repository }}
+  SERVER_IMAGE_TAG: ${{ join() }}
 
 jobs:
   build: #Job 1
@@ -20,8 +21,9 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      SERVER_IMAGE_TAG: ${{ env.REGISTRY }}/${{ github.repository }}/Backend
-      CLIENT_IMAGE_TAG: ${{ env.REGISTRY }}/${{ github.repository }}/Frontend
+      SERVER_IMAGE_TAG: |
+        ${{ join([env.REGISTRY, ${{ github.repository }}, 'Backend'], '/') }}
+      #CLIENT_IMAGE_TAG: ${{ env.REGISTRY }}/${{ github.repository }}/Frontend
 
     steps:
       - name: Checkout repository
