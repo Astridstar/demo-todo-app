@@ -12,18 +12,13 @@ env:
   REGISTRY: ghcr.io
   # github.repository as <account>/<repo>
   REPOSITORY: ${{ github.repository }}
-  SERVER_IMAGE_TAG: ${{ join() }}
+  SERVER_IMAGE_TAG: ghcr.io/${{ github.repository }}/Backend
 
 jobs:
   build: #Job 1
     #needs: setup job
     name: build
     runs-on: ubuntu-latest
-
-    env:
-      SERVER_IMAGE_TAG: |
-        ${{ join([env.REGISTRY, ${{ github.repository }}, 'Backend'], '/') }}
-      #CLIENT_IMAGE_TAG: ${{ env.REGISTRY }}/${{ github.repository }}/Frontend
 
     steps:
       - name: Checkout repository
@@ -62,7 +57,7 @@ jobs:
         with:
           context: ./server
           push: true
-          tags: ${{ env.SERVER_IMAGE_TAG_LOWER }}
+          tags: ${{ env.SERVER_IMAGE_TAG }}
           labels: ${{ steps.meta.outputs.labels }}
           secrets: 'github_token=${{ secrets.GITHUB_TOKEN }}'
 
