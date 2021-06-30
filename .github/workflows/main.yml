@@ -12,8 +12,8 @@ env:
   REGISTRY: ghcr.io
   # github.repository as <account>/<repo>
   IMAGE_NAME: ${{ github.repository }}
-  SERVER_IMAGE_NAME: ${{ IMAGE_NAME }}/Backend
-  CLIENT_IMAGE_NAME: ${{ IMAGE_NAME }}/Frontend
+  SERVER_IMAGE_NAME: ${{ github.repository }}/Backend
+  CLIENT_IMAGE_NAME: ${{ github.repository }}/Frontend
 
 jobs:
   build:
