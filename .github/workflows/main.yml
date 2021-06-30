@@ -13,6 +13,7 @@ env:
   # github.repository as <account>/<repo>
   REPOSITORY: ${{ github.repository }}
   SERVER_IMAGE_TAG: ghcr.io/${{ github.repository }}/Backend
+  repostr: ${{ github.repository }}
 
 jobs:
   build: #Job 1
