@@ -58,7 +58,7 @@ jobs:
         with:
           context: ./server
           push: true
-          tags: ${{ $ENV_REPOSTR }}
+          tags: $ENV_REPOSTR
           labels: ${{ steps.meta.outputs.labels }}
           secrets: 'github_token=${{ secrets.GITHUB_TOKEN }}'
 
