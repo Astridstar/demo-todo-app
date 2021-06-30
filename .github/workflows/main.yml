@@ -16,14 +16,10 @@ env:
   CLIENT_IMAGE_NAME: ${{ github.repository }}/Frontend
 
 jobs:
-  build:
-    name: build
+  setup:
+    name: setup
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-
       # Login against a Docker registry except on PR
       # https://github.com/docker/login-action
       - name: Login to GitHub Container Registry
@@ -32,6 +28,15 @@ jobs:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
+
+  build:
+    needs: setup
+    name: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
 
       #      - name: Build the server Docker mage
       #        working-directory: ./server
@@ -55,7 +60,7 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          secrets: "github_token=${{ secrets.REPO_TOKEN }}"
+          secrets: 'github_token=${{ secrets.REPO_TOKEN }}'
 
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
