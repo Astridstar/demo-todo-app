@@ -55,7 +55,7 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          secrets: "github_token=${{ secrets.GITHUB_TOKEN }}"
+          secrets: "github_token=${{ secrets.REPO_TOKEN }}"
 
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
