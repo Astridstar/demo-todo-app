@@ -46,7 +46,7 @@ jobs:
         with:
           context: '${{ env.WORK_DIR }}'
           push: true
-          tags: ${ }}:${{ github.sha }}
+          tags: ${{ env.IMAGE_TAG }}:${{ github.sha }}
           labels: ${{ steps.meta.outputs.labels }}
           secrets: 'github_token=${{ secrets.GITHUB_TOKEN }}'
 
