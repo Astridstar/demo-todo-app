@@ -1,22 +1,18 @@
-name: Build and deploy frontend and backend actions
+name: Build and deploy demo web server
 
 on:
   push:
     branches: [master]
   pull_request:
-    # The branches below must be a subset of the branches above
     branches: [master]
 
 env:
-  # Use docker.io for Docker Hub if empty
-  REGISTRY: ghcr.io
-  # github.repository as <account>/<repo>
+  REGISTRY: ghcr.io # Using Github container repository
   REPOSITORY: ghcr.io/astridstar/demo-to-app/
   SERVER_IMAGE_TAG: ghcr.io/astridstar/demo-to-app/backend
 
 jobs:
-  build: #Job 1
-    #needs: setup job
+  build:
     name: build
     runs-on: ubuntu-latest
 
@@ -31,8 +27,7 @@ jobs:
       - name: Convert repository name to lowercase
         run: |
           echo ${ENV_REPOSTR=$( echo "${{ github.repository }}" | tr "[:upper:]" "[:lower:]")}
-          
-          
+
       # Login against a Docker registry except on PR
       # https://github.com/docker/login-action
       - name: Login to GitHub Container Registry
@@ -58,9 +53,31 @@ jobs:
         with:
           context: ./server
           push: true
-          tags: ${{ env.SERVER_IMAGE_TAG }}
+          tags: ${{ env.SERVER_IMAGE_TAG }}:${{ github.sha }}
           labels: ${{ steps.meta.outputs.labels }}
           secrets: 'github_token=${{ secrets.GITHUB_TOKEN }}'
 
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
+
+  scan:
+    needs: build
+    name: Trivy Scan
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: '${{ env.SERVER_IMAGE_TAG }}:${{ github.sha }}'
+          format: 'table'
+          exit-code: '1'
+          ignore-unfixed: true
+          vuln-type: 'os,library'
+          severity: 'UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL'
+          scan-type: 'image'
+
+      - name: Upload Trivy scan results to GitHub Security tab
+        uses: github/codeql-action/upload-sarif@v1
+        with:
+          sarif_file: 'trivy-results.sarif'
