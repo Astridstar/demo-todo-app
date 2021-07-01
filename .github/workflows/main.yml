@@ -60,9 +60,9 @@ jobs:
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
 
-  scan:
+  scan_high_critical:
     needs: build
-    name: Trivy Scan
+    name: Trivy Scan - High and Critical Severity
     runs-on: ubuntu-latest
 
     steps:
@@ -75,7 +75,7 @@ jobs:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Trivy vulnerability scanner - High and Critical Severity
+      - name: Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@master
         with:
           image-ref: '${{ env.SERVER_IMAGE_TAG }}:${{ github.sha }}'
@@ -89,12 +89,27 @@ jobs:
           template: '@/contrib/sarif.tpl'
           output: 'trivy-results-high-critical.sarif'
 
-      - name: Upload Trivy scan results (Critical, High Severity) to GitHub Security tab
+      - name: Upload Trivy scan results to GitHub Security tab
         uses: github/codeql-action/upload-sarif@v1
         with:
           sarif_file: 'trivy-results-high-critical.sarif'
 
-      - name: Trivy vulnerability scanner - Medium, Low Severity
+  scan_medium_low:
+    needs: scan_high_critical
+    name: Trivy Scan - Medium, Low, Unknown Severity
+    runs-on: ubuntu-latest
+
+    steps:
+      # Login against a Docker registry except on PR
+      # https://github.com/docker/login-action
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@master
         with:
           image-ref: '${{ env.SERVER_IMAGE_TAG }}:${{ github.sha }}'
@@ -108,7 +123,7 @@ jobs:
           template: '@/contrib/sarif.tpl'
           output: 'trivy-results-medium-low.sarif'
 
-      - name: Upload Trivy scan results (Medium, Low Severity) to GitHub Security tab
+      - name: Upload Trivy scan results to GitHub Security tab
         uses: github/codeql-action/upload-sarif@v1
         with:
           sarif_file: 'trivy-results-medium-low.sarif'
