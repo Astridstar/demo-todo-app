@@ -11,8 +11,8 @@ env:
   # Use docker.io for Docker Hub if empty
   REGISTRY: ghcr.io
   # github.repository as <account>/<repo>
-  REPOSITORY: ${{ github.repository }}
-  SERVER_IMAGE_TAG: ghcr.io/${{ github.repository }}/Backend
+  REPOSITORY: ghcr.io/astridstar/demo-to-app/
+  SERVER_IMAGE_TAG: ghcr.io/astridstar/demo-to-app/Backend
 
 jobs:
   build: #Job 1
@@ -58,7 +58,7 @@ jobs:
         with:
           context: ./server
           push: true
-          tags: $ENV_REPOSTR
+          tags: ${{ env.SERVER_IMAGE_TAG }}
           labels: ${{ steps.meta.outputs.labels }}
           secrets: 'github_token=${{ secrets.GITHUB_TOKEN }}'
 
