@@ -1,4 +1,4 @@
-name: Build & scan demo web application
+name: Build & scan demo client application
 
 on:
   push:
@@ -9,7 +9,7 @@ on:
 env:
   REGISTRY: ghcr.io # Using Github container repository
   REPOSITORY: ghcr.io/astridstar/demo-to-app/
-  IMAGE_TAG: ghcr.io/astridstar/demo-to-app/frontend
+  IMAGE_TAG: ghcr.io/astridstar/demo-to-app/client
   WORK_DIR: ./client
 
 jobs:
@@ -20,14 +20,6 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
-
-      #      - name: Build the server Docker mage
-      #        working-directory: ./server
-      #       run: docker build . --file Dockerfile --tag ${{ env.IMAGE_TAG }}
-
-      - name: Convert repository name to lowercase
-        run: |
-          echo ${ENV_REPOSTR=$( echo "${{ github.repository }}" | tr "[:upper:]" "[:lower:]")}
 
       # Login against a Docker registry except on PR
       # https://github.com/docker/login-action

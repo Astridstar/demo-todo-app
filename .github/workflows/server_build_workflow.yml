@@ -21,14 +21,6 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      #      - name: Build the server Docker mage
-      #        working-directory: ./server
-      #       run: docker build . --file Dockerfile --tag ${ }}
-
-      - name: Convert repository name to lowercase
-        run: |
-          echo ${ENV_REPOSTR=$( echo "${{ github.repository }}" | tr "[:upper:]" "[:lower:]")}
-
       # Login against a Docker registry except on PR
       # https://github.com/docker/login-action
       - name: Login to GitHub Container Registry
@@ -79,13 +71,12 @@ jobs:
       - name: Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@master
         with:
-          image-ref: '${ }}:${{ github.sha }}'
+          image-ref: '${{ env.IMAGE_TAG }}:${{ github.sha }}'
           exit-code: '0' # exit code 1 when vulnerabilities were found and flag as failed
           ignore-unfixed: true
           vuln-type: 'os,library'
           severity: 'HIGH,CRITICAL'
           scan-type: 'image'
-          #format: 'table'
           format: 'template'
           template: '@/contrib/sarif.tpl'
           output: 'trivy-results-high-critical.sarif'
@@ -113,13 +104,12 @@ jobs:
       - name: Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@master
         with:
-          image-ref: '${ }}:${{ github.sha }}'
+          image-ref: '${{ env.IMAGE_TAG }}:${{ github.sha }}'
           exit-code: '0' # exit code 1 when vulnerabilities were found and flag as failed
           ignore-unfixed: true
           vuln-type: 'os,library'
           severity: 'MEDIUM,LOW,UNKNOWN'
           scan-type: 'image'
-          #format: 'table'
           format: 'template'
           template: '@/contrib/sarif.tpl'
           output: 'trivy-results-medium-low.sarif'
