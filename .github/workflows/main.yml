@@ -12,7 +12,7 @@ env:
   REGISTRY: ghcr.io
   # github.repository as <account>/<repo>
   REPOSITORY: ghcr.io/astridstar/demo-to-app/
-  SERVER_IMAGE_TAG: ghcr.io/astridstar/demo-to-app/Backend
+  SERVER_IMAGE_TAG: ghcr.io/astridstar/demo-to-app/backend
 
 jobs:
   build: #Job 1
