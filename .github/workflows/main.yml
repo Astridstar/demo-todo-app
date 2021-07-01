@@ -87,9 +87,28 @@ jobs:
           #format: 'table'
           format: 'template'
           template: '@/contrib/sarif.tpl'
-          output: 'trivy-results.sarif'
+          output: 'trivy-results-high-critical.sarif'
 
-      - name: Upload Trivy scan results to GitHub Security tab
+      - name: Upload Trivy scan results (Critical, High Severity) to GitHub Security tab
         uses: github/codeql-action/upload-sarif@v1
         with:
-          sarif_file: 'trivy-results.sarif'
+          sarif_file: 'trivy-results-high-critical.sarif'
+
+      - name: Trivy vulnerability scanner - Medium, Low Severity
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: '${{ env.SERVER_IMAGE_TAG }}:${{ github.sha }}'
+          exit-code: '0' # exit code 1 when vulnerabilities were found and flag as failed
+          ignore-unfixed: true
+          vuln-type: 'os,library'
+          severity: 'MEDIUM,LOW,UNKNOWN'
+          scan-type: 'image'
+          #format: 'table'
+          format: 'template'
+          template: '@/contrib/sarif.tpl'
+          output: 'trivy-results-medium-low.sarif'
+
+      - name: Upload Trivy scan results (Medium, Low Severity) to GitHub Security tab
+        uses: github/codeql-action/upload-sarif@v1
+        with:
+          sarif_file: 'trivy-results-medium-low.sarif'
