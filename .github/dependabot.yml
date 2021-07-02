@@ -5,16 +5,26 @@
 
 version: 2
 updates:
-  - package-ecosystem: "npm" # See documentation for possible values
-    directory: "/" # Location of package manifests
+  # Maintain dependencies for npm
+  - package-ecosystem: 'npm'
+    directory: '../client'
     schedule:
-      # Check daily for npm updates
-      interval: "daily"
-      
-    # Raise pull requests for version updates
-    # to pip against the `develop` branch
-    target-branch: "development"
-    
-    # Labels on pull requests for security and version updates
+      interval: 'daily'
+    target-branch: 'development'
     labels:
-      - "npm dependencies"
+      - 'npm dependencies'
+
+  # Maintain dependencies for npm
+  - package-ecosystem: 'npm'
+    directory: '../server'
+    schedule:
+      interval: 'daily'
+    target-branch: 'development'
+    labels:
+      - 'npm dependencies'
+
+  # Maintain dependencies for GitHub Actions
+  - package-ecosystem: 'github-actions'
+    directory: '/'
+    schedule:
+      interval: 'daily'
