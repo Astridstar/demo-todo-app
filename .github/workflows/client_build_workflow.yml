@@ -2,9 +2,9 @@ name: Build & scan demo client application
 
 on:
   push:
-    branches: [master]
+    branches: [master, development]
   pull_request:
-    branches: [master]
+    branches: [master, development]
 
 env:
   REGISTRY: ghcr.io # Using Github container repository
@@ -36,7 +36,7 @@ jobs:
         with:
           # list of Docker images to use as base name for tags
           images: |
-            ${{ env.IMAGE_TAG }}
+            ${{ env.IMAGE_TAG }}:${{ github.sha }}
 
       # Build and push Docker image with Buildx (don't push on PR)
       # https://github.com/docker/build-push-action
