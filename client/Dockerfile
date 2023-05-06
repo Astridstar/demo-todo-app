@@ -4,6 +4,8 @@ WORKDIR /client
 
 COPY package.json yarn.lock README.md ./
 
+ENV NODE_OPTIONS=--openssl-legacy-provider
+
 RUN yarn
 
 COPY ./public ./public
@@ -14,7 +16,7 @@ COPY ./src ./src
 # each time there is a change in the IP address to the backend web service
 # ENV REACT_APP_baseAPIURL=http://192.168.98.137:31102
 
-RUN yarn build
+RUN npm run build
 
 FROM nginx:latest
 

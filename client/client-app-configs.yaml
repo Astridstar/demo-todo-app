@@ -1,6 +1,0 @@
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: client-side-configs
-data:
-  REACT_APP_baseAPIURL: http://192.168.98.131
