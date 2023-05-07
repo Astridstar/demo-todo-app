@@ -1,27 +1,20 @@
+#Stage 1
 FROM node:alpine as todo-app-build
-
 WORKDIR /client
-
-COPY package.json yarn.lock README.md ./
-
+COPY package.json README.md ./
 ENV NODE_OPTIONS=--openssl-legacy-provider
-
-RUN yarn
-
 COPY ./public ./public
-
 COPY ./src ./src
+#RUN npm run restore
+RUN npm install
 
 # Remove from the build file and move it to the config to remove the need to rebuild the image
 # each time there is a change in the IP address to the backend web service
 # ENV REACT_APP_baseAPIURL=http://192.168.98.137:31102
 
-RUN npm run build
-
 FROM nginx:latest
-
 LABEL maintainer=Tester
-
-COPY --from=todo-app-build /client/build/ /usr/share/nginx/html
-
-EXPOSE 80
+WORKDIR /usr/share/nginx/html
+RUN rm -rf ./*
+COPY --from=todo-app-build /client .
+ENTRYPOINT ["nginx", "-g", "daemon off;"]

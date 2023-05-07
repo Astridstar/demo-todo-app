@@ -6,3 +6,5 @@ docker push ghcr.io/astridstar/todo-client-kubernetes-app:latest
 
 
 #trivy image  --vuln-type "library" ghcr.io/astridstar/todo-client-kubernetes-app:latest 
+
+docker run --name todoappclient -d -p 10080:10080 todo-client-kubernetes-app:latest
