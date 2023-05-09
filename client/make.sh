@@ -1,8 +1,8 @@
 #!/bin/bash
 
-docker image build -t todo-client-kubernetes-app .
-docker tag todo-client-kubernetes-app:latest ghcr.io/astridstar/todo-client-kubernetes-app:latest
-docker push ghcr.io/astridstar/todo-client-kubernetes-app:latest
+sudo docker image build -t todo-app-frontend .
+sudo docker tag todo-app-frontend:latest ghcr.io/astridstar/demo-to-app/todo-app-frontend:latest
+sudo docker push ghcr.io/astridstar/demo-to-app/todo-app-frontend:latest
 
 
-#trivy image  --vuln-type "library" ghcr.io/astridstar/todo-client-kubernetes-app:latest 
+#trivy image  --vuln-type "library" ghcr.io/astridstar/todo-app-frontend:latest 

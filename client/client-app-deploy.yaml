@@ -1,20 +1,30 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: todo-client-app-deploy
+  name: todo-app-frontend
+  labels:
+    app/tier: frontend 
+    app/release: experimental
+    app/project: demo
+    app/environment: development
+  namespace: demo
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: todo-client-app
+      app/tier: frontend 
+      app/release: experimental
+      app/project: demo
+      app/environment: development
   template:
     metadata:
       labels:
-        app: todo-client-app
+        app/tier: frontend 
+        app/release: experimental
+        app/project: demo
+        app/environment: development
     spec:
       containers:
-        - image: ghcr.io/astridstar/todo-client-kubernetes-app:latest
-          name: container1
-          imagePullPolicy: Always
-      imagePullSecrets:
-        - name: dockerconfigjson-github-com
+        - image: ghcr.io/astridstar/todo-app-frontend:latest
+          name: todo-app-frontend
+#          imagePullPolicy: Never

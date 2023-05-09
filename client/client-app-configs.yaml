@@ -1,6 +1,14 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
+  namespace: demo
   name: client-side-configs
+  labels:
+    app/tier: frontend 
+    app/release: experimental
+    app/project: demo
+    app/environment: development
 data:
-  REACT_APP_baseAPIURL: http://192.168.98.131
+  REACT_APP_baseAPIURL: http://Sarahton.localhost
+
+#  REACT_APP_baseAPIURL: http://192.168.98.131
